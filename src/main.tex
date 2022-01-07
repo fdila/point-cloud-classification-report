@@ -1,0 +1,87 @@
+\documentclass{article}
+
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\graphicspath{ {./images/} }
+
+
+\title{Point cloud classification using deep neural networks}
+
+
+\author{
+ Federica Di Lauro \\
+  829470\\
+  \texttt{f.dilauro2@campus.unimib.it} \\
+  %% examples of more authors
+   \And
+  Andrea Premate \\
+  829777\\
+  \texttt{a.premate@campus.unimib.it} \\
+  \And
+  Lidia Lucrezia Tonelli \\
+  813114\\
+  \texttt{l.tonelli@campus.unimib.it} \\
+}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+TODO
+\end{abstract}
+
+\section{Introduction}
+
+\cite{lu2020deep}
+
+\paragraph{Point Cloud}
+
+\paragraph{Classification task}
+
+\paragraph{Dataset}
+
+ModelNet40 \cite{ShapeNets}
+
+\paragraph{Metrics}
+
+\section{Classification Methods}
+
+\subsection{Projection based}
+
+\subsubsection{Multi-View}
+\subsubsection{Volumetric}
+
+\subsection{Point Based}
+
+\subsubsection{Multi Layer Perceptron}
+
+
+\newpage %TODO togliere newpage, è solo per regolarmi
+\subsubsection{Convolutional Neural Networks}
+\input{sections/pointconv}
+
+\newpage %TODO togliere newpage, è solo per regolarmi
+\subsubsection{Graph inspired networks}
+
+\input{sections/graph}
+
+\section{Comparison}
+
+\section{Conclusion}
+
+\bibliographystyle{unsrt}  
+
+\bibliography{references}
+
+\end{document}
