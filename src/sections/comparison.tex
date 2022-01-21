@@ -1,0 +1,54 @@
+In this survey we have investigated the main point cloud classification approaches: projection-based and point-based. Projection-based approaches transform the unstructured 3D point clouds into specific modality, such as multi-view, voxels or pillars, and extract features from the target format. Point-based approach, on the other side, learn features directly from the points and not from their spatial arrangement.
+
+As examples of projection-based approaches, we've described the multi-view and the volumetric methods; in the former the information in multiple 2D views of an object is compiled in a compact descriptor with a CNN, in the latter the cloud points are projected into volumetric occupancy grids on which a CNN performs the classification task. As examples of the multi-view method we have the CNNs \textit{FV 12x} and \textit{MVCNN}, while the volumetric approach is represented by \textit{VoxNet}.
+
+In the context of point-based approach, the three main methods are MLP, where features from every point are extracted with independent multi-layer perceptrons, CNN, networks that are directly fed with points and define a special type of convolution, and graph inspired networks, that exploit the topological information already present in the point cloud. As representants of these three methods we have respectively PointNet and PointNet++ as MLPs, PointConv as as CNN and EdgeConv as a graph inspired network.
+
+% TODO: vorrei aggiungere un confornto tra i vari metodi che usano le reti per ottenere permutation invariance e translation/rotation invariance.
+% TODO le cose che sto scrivendo per questa parte sono da guardare un attimo insieme, ho scritto quello che ho vagamente interpretato dalle sezioni sopra ma non ho letto i paper
+
+\paragraph{Permutation invariance} Permutation invariance allows the network to not being sensitive to the order of the points in the point cloud.
+
+Projection based methods do not need an explicit way to handle the permutation of the points in the point cloud, since the points get projected either on images or voxels before being fed to the network. The methods used to project the points are invariant to the permutations of the point cloud.
+
+Point based methods seen in this survey have different ways to achieve this property:
+
+\begin{itemize}
+    \item PointNet and PointNet++ TODO
+    \item PointConv uses the same MLP weights for each point in the PointConv layer. TODO non sono convinta
+    \item DGCNN uses a symmetric aggregation function (the authors used the max function).
+\end{itemize}
+
+\paragraph{Transformation invariance} Transformation invariance allows the network to be robust to geometric transformations such as rotation and translation.
+
+Projection based methods TODO
+
+Point based methods TODO
+
+\paragraph{Results comparison}
+
+The only dataset on which all neural networks have been tested is ModelNet40.
+
+In table \ref{tab:comparison_results} the overall accuracy results are shown.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lccc}
+        \hline & \text { MODEL SIZE(MB) } & \text { TIME(MS) } & \text { ACCURACY(\%) } \\
+        \hline 
+        \text { FV 12x} & - & - & 84.8 \\
+        \text { MVCNN} & - & - & 90.1 \\
+        \text { VoxNet} & - & - & 83.0 \\
+        \text { POINTNET (QI ET AL. 2017B) } & 40 & 16.6 & 89.2 \\
+        \text { POINTNET++ (QI ET AL. 2017C) } & 12 & 163.2 & 91.9 \\
+        \text { PointConv} & 11 & 19.7 & 92.5 \\
+        \text { DCG } & 21 & 27.2 & 92.9 \\
+        \hline
+    \end{tabular}
+    \caption{Results for each network, tested on ModelNet40}
+    \label{tab:comparison_results}
+\end{table}
+
+vedi table 2 di guo2020
+
+vedi supplementary B del paper di pointnet per comparazione tra pointnet e voxnet (con grafico!)

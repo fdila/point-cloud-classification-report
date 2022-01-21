@@ -5,26 +5,30 @@
 
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[hyphens]{url}
 \usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
 \usepackage{booktabs}       % professional-quality tables
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{lipsum}
 \usepackage{graphicx}
+\usepackage{caption}
+\captionsetup[table]{skip=10pt}
 \usepackage{amsmath}
+\usepackage{wrapfig}
+\usepackage{siunitx}
+\usepackage{float}
+
 \graphicspath{ {./images/} }
 
 
 \title{Point cloud classification using deep neural networks}
 
-
 \author{
  Federica Di Lauro \\
   829470\\
   \texttt{f.dilauro2@campus.unimib.it} \\
-  %% examples of more authors
    \And
   Andrea Premate \\
   829777\\
@@ -38,47 +42,40 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-TODO
+Point clouds are a particular type of data, made of an unordered list of 3D points in space. Feeding this type of input in a deep neural network, for tasks such as classification, segmentation and so on, is not a trivial task because there is no intrinsic geometric structure in the data, but the geometric structure of the point cloud is fundamental to extract information. In this in-depth study we analyze multiple approaches that have been proposed in literature. We limit our study to the classification task, since it's the task that have been first treated in literature and the neural network developed for this task are used as backbones for more difficult tasks.
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 
-\cite{lu2020deep}
-
-\paragraph{Point Cloud}
-
-\paragraph{Classification task}
-
-\paragraph{Dataset}
-
-ModelNet40 \cite{ShapeNets}
-
-\paragraph{Metrics}
+\input{sections/introduction}
 
 \section{Classification Methods}
 
 \subsection{Projection based}
+\input{sections/proj-based-INTRO}
 
-\subsubsection{Multi-View}
-\subsubsection{Volumetric}
+\subsubsection{Multi-View}~\cite{multi_view}~\cite{LBMPFusion}
+\input{sections/multi_view}
+
+\subsubsection{Volumetric} ~\cite{VoxNet}
+\input{sections/volumetric}
 
 \subsection{Point Based}
+\input{sections/point_based}
 
-\subsubsection{Multi Layer Perceptron}
-
-
-\newpage %TODO togliere newpage, è solo per regolarmi
 \subsubsection{Convolutional Neural Networks}
 \input{sections/pointconv}
 
-\newpage %TODO togliere newpage, è solo per regolarmi
 \subsubsection{Graph inspired networks}
-
 \input{sections/graph}
 
 \section{Comparison}
+\input{sections/comparison}
 
 \section{Conclusion}
+\input{sections/conclusion}
+
+\newpage %mi si mischiava una tabella alle references, è da fixare
 
 \bibliographystyle{unsrt}  
 
