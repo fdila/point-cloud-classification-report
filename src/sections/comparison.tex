@@ -1,54 +1,74 @@
-In this survey we have investigated the main point cloud classification approaches: projection-based and point-based. Projection-based approaches transform the unstructured 3D point clouds into specific modality, such as multi-view, voxels or pillars, and extract features from the target format. Point-based approach, on the other side, learn features directly from the points and not from their spatial arrangement.
+From this survey we can see that the main points on which different networks differ is how the input is fed into the network, how each network achieves permutation and transformation invariance, and how each network exploits the spatial information of the point clouds.
 
-As examples of projection-based approaches, we've described the multi-view and the volumetric methods; in the former the information in multiple 2D views of an object is compiled in a compact descriptor with a CNN, in the latter the cloud points are projected into volumetric occupancy grids on which a CNN performs the classification task. As examples of the multi-view method we have the CNNs \textit{FV 12x} and \textit{MVCNN}, while the volumetric approach is represented by \textit{VoxNet}.
+\paragraph{Input data} The main difference between the networks is what input they take to be processed.
 
-In the context of point-based approach, the three main methods are MLP, where features from every point are extracted with independent multi-layer perceptrons, CNN, networks that are directly fed with points and define a special type of convolution, and graph inspired networks, that exploit the topological information already present in the point cloud. As representants of these three methods we have respectively PointNet and PointNet++ as MLPs, PointConv as as CNN and EdgeConv as a graph inspired network.
+Projection based methods don't directly use the point clouds, instead they project the point cloud into a different structure, and then feed it to the network.
+This makes it easier to design the network, because traditional CNNs can be used to process both images and 3D grids. 
+The disadvantages of this approaches are the memory consumption since multiple images and voxels occupy more space than the raw point cloud, and the fact that the projection of the points can introduce artifacts in the images and 3D grids.
 
-% TODO: vorrei aggiungere un confornto tra i vari metodi che usano le reti per ottenere permutation invariance e translation/rotation invariance.
-% TODO le cose che sto scrivendo per questa parte sono da guardare un attimo insieme, ho scritto quello che ho vagamente interpretato dalle sezioni sopra ma non ho letto i paper
+Point based methods directly feed the points of the point cloud in the neural network. This solves the disadvantages of projection based methods, but introduces other complications.
+The networks must be designed to deal with permutation of the points, transformations of the point cloud and have to specifically design methods to employ the spatial information.
 
-\paragraph{Permutation invariance} Permutation invariance allows the network to not being sensitive to the order of the points in the point cloud.
+\paragraph{Permutation invariance} Permutation invariance allows the network to be unsensitive to the order of the points in the point cloud.
 
-Projection based methods do not need an explicit way to handle the permutation of the points in the point cloud, since the points get projected either on images or voxels before being fed to the network. The methods used to project the points are invariant to the permutations of the point cloud.
+Projection based methods do not need an explicit way to handle the permutation of the points in the point cloud, since the points get projected either on images or voxels before being fed to the network. The methods used to project the points are invariant to the permutations of the point cloud. 
 
 Point based methods seen in this survey have different ways to achieve this property:
-
 \begin{itemize}
-    \item PointNet and PointNet++ TODO
-    \item PointConv uses the same MLP weights for each point in the PointConv layer. TODO non sono convinta
-    \item DGCNN uses a symmetric aggregation function (the authors used the max function).
+    \item PointNet and PointNet++ use a symmetric function that takes a set of points and produces a new order-invariant vector, such as a max pooling function.
+    \item PointConv uses weights that are shared between all the points.
+    \item DGCNN uses a symmetric aggregation function over the edge features (the authors used the max function).
 \end{itemize}
 
 \paragraph{Transformation invariance} Transformation invariance allows the network to be robust to geometric transformations such as rotation and translation.
 
-Projection based methods TODO
+Projection based methods share a very similar technique:
+\begin{itemize}
+    \item MVCNN uses multiple views of the same 3D object to perform the training and the classification of a point cloud. If two inputs of this network represent the same object, but rotated, the architecture will assure an approximate rotational invariance due to the optimization process. It is not intrinsically invariant to translation.
+    \item A similar reasoning can be applied to VoxNet, with the only difference that we deal with 3D grids instead of 2D views. As explained in the Voxnet results section and in figure~\ref{fig:VOLUM_invariance}, by analyzing the neuron activations of 12 different rotation of the same object we can show that there is an approximate rotational invariance. It is not intrinsically invariant to translation.
+\end{itemize}
 
-Point based methods TODO
+Point based methods employ different techniques:
+\begin{itemize}
+    \item PointNet and PointNet++ use T-Nets to achieve invariance to rigid transformations (both translation and rotation). T-nets predict affine transformation matrices that perform a pose normalization. A T-net predicts the matrix to be multiplied by the input points, and another T-Net predicts the matrix to be multiplied by the features. %TODO è giusto? sì ho aggiunto pose normalization
+    \item PointConv is a full approximation of the convolution operator, thus is invariant to translation. It is not intrinsically invariant to rotation.
+    \item DGCNN is partially invariant to translation: it is only invariant in the part of the edge function that depends on the difference between the centroid and its neighbors, while the global information in the edge function is not translation invariant. It is not intrinsically invariant to rotation.
+\end{itemize}
+
+\paragraph{Spatial information} Since point clouds represent 3D information in space, it can be useful to use the geometric relationship between the points.
+
+Projection based methods project the points into fixed grids and then use standard convolution to compute the features, so they make use of the relationship between the points. 
+
+Point based methods vary depending on the network:
+
+\begin{itemize}
+    \item PointNet doesn't use any spatial information to learn the features as it takes the whole point cloud as input.
+    \item PointNet++ uses the feature abstraction layer to find local neighbors and then apply PointNet locally to extract a hierarchy of features.
+    \item PointConv uses the same feature abstraction layer to find the neighbors and then applies a convolution operator.
+    \item DGCNN first computes a local neighborhood graph and then applies a convolution-like operator on the edges of the graph.
+\end{itemize}
 
 \paragraph{Results comparison}
 
-The only dataset on which all neural networks have been tested is ModelNet40.
+The only dataset on which all neural networks have been tested is ModelNet40. In table~\ref{tab:comparison_results} the overall accuracy results and model size are shown. 
 
-In table \ref{tab:comparison_results} the overall accuracy results are shown.
+It can be seen that the volumetric model has less parameters than to other networks described, but its accuracy is quite low, probably because of the resolution of the voxel grid that must be kept small because of the computational complexity increases cubically. The multi-view approach have fair accuracy results but its model size is 10 to 100 times larger than the other neural networks that achieve similar accuracy.
+
+Point based methods performances have been achieving increasingly better accuracy results, since the first approach described by PointNet was introduced. All the point based methods described have comparable model sizes, apart from PointConv which has $\sim$10 times the parameters of PointNet++ and DGCNN, with similar accuracy results.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{lccc}
-        \hline & \text { MODEL SIZE(MB) } & \text { TIME(MS) } & \text { ACCURACY(\%) } \\
+    \caption{Results for each network, tested on ModelNet40. The model size is taken from \cite{guo2020deep} for all models except MVCNN, for which the parameters have been extracted from the PyTorch model available on GitHub \url{https://github.com/jongchyisu/mvcnn_pytorch}}
+    \begin{tabular}{lcc}
+        \hline & \text { MODEL SIZE (params) } & \text { ACCURACY (\%) } \\
         \hline 
-        \text { FV 12x} & - & - & 84.8 \\
-        \text { MVCNN} & - & - & 90.1 \\
-        \text { VoxNet} & - & - & 83.0 \\
-        \text { POINTNET (QI ET AL. 2017B) } & 40 & 16.6 & 89.2 \\
-        \text { POINTNET++ (QI ET AL. 2017C) } & 12 & 163.2 & 91.9 \\
-        \text { PointConv} & 11 & 19.7 & 92.5 \\
-        \text { DCG } & 21 & 27.2 & 92.9 \\
+        \text { \textbf{MVCNN}} & 128M  & 90.1 \\
+        \text { \textbf{VoxNet}} & 921K  & 83.0 \\
+        \text { \textbf{PointNet}} & 3.5 M & 89.2 \\
+        \text { \textbf{PointNet++}} & 1.48 M & 91.9 \\
+        \text { \textbf{PointConv}} & 11 M  & 92.5 \\
+        \text { \textbf{DGCNN} } & 1.84 M & 92.9 \\
         \hline
     \end{tabular}
-    \caption{Results for each network, tested on ModelNet40}
     \label{tab:comparison_results}
 \end{table}
-
-vedi table 2 di guo2020
-
-vedi supplementary B del paper di pointnet per comparazione tra pointnet e voxnet (con grafico!)

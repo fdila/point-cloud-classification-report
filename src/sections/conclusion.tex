@@ -1,9 +1,12 @@
-TODO inventare qualcosa
+In this survey we have investigated the main point cloud classification approaches: projection-based and point-based. Projection-based approaches transform the unstructured 3D point clouds into specific modality, such as multi-view, voxels or pillars, and extract features from the target format. Point-based approaches, on the other side, learn features directly from the points and not from their spatial arrangement.
 
-In this survey, a short list of point cloud classification networks was made, highlighting the different approaches seen in literature.
+As examples of projection-based approaches, we've described the multi-view and the volumetric methods; in the former the information in multiple 2D views of an object is compiled in a compact descriptor with a CNN, in the latter the cloud points are projected into volumetric occupancy grids on which a CNN performs the classification task. As examples of the multi-view method we have the \textit{CNNs 12x}, \textit{FV 12x} and \textit{MVCNN}, while the volumetric approach is represented by \textit{VoxNet}.
 
-Different networks use different methods to achieve the same properties needed for treating point clouds: permutation invariance and transformation invariance.
+In the context of point-based approach, the three main methods are MLP, where features from every point are extracted with independent multi-layer perceptrons, CNN, networks that are directly fed with points and define a special type of convolution, and graph inspired networks, that exploit the topological information already present in the point cloud. As representants of these three methods we have respectively PointNet and PointNet++ as MLPs, PointConv as as CNN and EdgeConv as a graph inspired network.
+
+The different networks described use different methods to achieve the same properties needed for treating point clouds: permutation invariance, transformation invariance and use of spatial information, a comprehensive comparison was made in section~\ref{sec:comparison}.
+
+It is also worth noting that while the classification networks here described, tested on an easy, synthetic dataset might seem not really useful in real case applications, they are used as backbones for more complicated and interesting tasks, described in section~\ref{sec:intro}.
+For example we can see from the survey by Zhang et al.~\cite{ZHANG2020222} some neural networks that do point cloud registration are based on the methods described above: PointNetLK~\cite{pointnetlk} is based on PointNet, DeepVCP~\cite{deepvcp} is based on PointNet++, DCP~\cite{dcp} is based on DGCNN.
 
 
-The neural networks described and the classification task tested on an easy, synthetic dataset might seem not really useful in real case applications. Instead, it is worth noting that the methods here described have paved the way of the more difficult tasks described in section \ref{sec:intro}.
-For example we can see from the survey by Zhang et al \cite{ZHANG2020222} some neural networks that do point cloud registration are based on the methods described above: PointNetLK \cite{pointnetlk} is based on PointNet, DeepVCP \cite{deepvcp} is based on PointNet++, DCP\cite{dcp} is based on DGCNN.

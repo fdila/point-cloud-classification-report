@@ -19,6 +19,9 @@
 \usepackage{wrapfig}
 \usepackage{siunitx}
 \usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+%\usepackage{refcheck}
 
 \graphicspath{ {./images/} }
 
@@ -42,7 +45,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-Point clouds are a particular type of data, made of an unordered list of 3D points in space. Feeding this type of input in a deep neural network, for tasks such as classification, segmentation and so on, is not a trivial task because there is no intrinsic geometric structure in the data, but the geometric structure of the point cloud is fundamental to extract information. In this in-depth study we analyze multiple approaches that have been proposed in literature. We limit our study to the classification task, since it's the task that have been first treated in literature and the neural network developed for this task are used as backbones for more difficult tasks.
+Point clouds are a particular type of data, made of an unordered list of 3D points in space. Feeding a deep neural network with this type of input, for tasks such as classification, segmentation and so on, is not a trivial task because there is no intrinsic geometric structure in the data, but the geometric structure of the point cloud is fundamental to extract information. In this in-depth study we analyze multiple approaches that have been proposed in literature. We limit our study to the classification task, since it's the task that have been first treated in literature and the neural network developed for it are used as backbones for more difficult tasks.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -54,10 +57,10 @@ Point clouds are a particular type of data, made of an unordered list of 3D poin
 \subsection{Projection based}
 \input{sections/proj-based-INTRO}
 
-\subsubsection{Multi-View}~\cite{multi_view}~\cite{LBMPFusion}
+\subsubsection{Multi-View}
 \input{sections/multi_view}
 
-\subsubsection{Volumetric} ~\cite{VoxNet}
+\subsubsection{Volumetric} 
 \input{sections/volumetric}
 
 \subsection{Point Based}
@@ -69,13 +72,11 @@ Point clouds are a particular type of data, made of an unordered list of 3D poin
 \subsubsection{Graph inspired networks}
 \input{sections/graph}
 
-\section{Comparison}
+\section{Comparison}\label{sec:comparison}
 \input{sections/comparison}
 
 \section{Conclusion}
 \input{sections/conclusion}
-
-\newpage %mi si mischiava una tabella alle references, è da fixare
 
 \bibliographystyle{unsrt}  
 
